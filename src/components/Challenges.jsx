@@ -1,38 +1,38 @@
-import { useContext, useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { useContext, useState } from "react"
+import { AnimatePresence, motion } from "framer-motion"
 
-import { ChallengesContext } from '../store/challenges-context.jsx';
-import ChallengeItem from './ChallengeItem.jsx';
-import ChallengeTabs from './ChallengeTabs.jsx';
+import { ChallengesContext } from "../store/challenges-context.jsx"
+import ChallengeItem from "./ChallengeItem.jsx"
+import ChallengeTabs from "./ChallengeTabs.jsx"
 
 export default function Challenges() {
-  const { challenges } = useContext(ChallengesContext);
-  const [selectedType, setSelectedType] = useState('active');
-  const [expanded, setExpanded] = useState(null);
+  const { challenges } = useContext(ChallengesContext)
+  const [selectedType, setSelectedType] = useState("active")
+  const [expanded, setExpanded] = useState(null)
 
   function handleSelectType(newType) {
-    setSelectedType(newType);
+    setSelectedType(newType)
   }
 
   function handleViewDetails(id) {
     setExpanded((prevId) => {
       if (prevId === id) {
-        return null;
+        return null
       }
 
-      return id;
-    });
+      return id
+    })
   }
 
   const filteredChallenges = {
-    active: challenges.filter((challenge) => challenge.status === 'active'),
+    active: challenges.filter((challenge) => challenge.status === "active"),
     completed: challenges.filter(
-      (challenge) => challenge.status === 'completed'
+      (challenge) => challenge.status === "completed"
     ),
-    failed: challenges.filter((challenge) => challenge.status === 'failed'),
-  };
+    failed: challenges.filter((challenge) => challenge.status === "failed"),
+  }
 
-  const displayedChallenges = filteredChallenges[selectedType];
+  const displayedChallenges = filteredChallenges[selectedType]
 
   return (
     <div id="challenges">
@@ -43,7 +43,13 @@ export default function Challenges() {
       >
         <AnimatePresence mode="wait">
           {displayedChallenges.length > 0 && (
-            <motion.ol key="list" exit={{ y: -30, opacity: 0 }}className="challenge-items">
+            <motion.ol
+              key="list"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ y: -30, opacity: 0 }}
+              className="challenge-items"
+            >
               <AnimatePresence>
                 {displayedChallenges.map((challenge) => (
                   <ChallengeItem
@@ -56,9 +62,17 @@ export default function Challenges() {
               </AnimatePresence>
             </motion.ol>
           )}
-        {displayedChallenges.length === 0 && <motion.p initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}  key="fallback">No challenges found.</motion.p>}
+          {displayedChallenges.length === 0 && (
+            <motion.p
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              key="fallback"
+            >
+              No challenges found.
+            </motion.p>
+          )}
         </AnimatePresence>
       </ChallengeTabs>
     </div>
-  );
+  )
 }
